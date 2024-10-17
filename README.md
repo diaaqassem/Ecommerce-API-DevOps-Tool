@@ -1,4 +1,3 @@
-
 # ecommerce-api-with-devops-tool
 This project is a fully functional e-commerce API built with Node.js and Express , and using DevOps tools
 
@@ -30,6 +29,17 @@ This project is a fully functional e-commerce API built with Node.js and Express
 
 This project is a fully functional e-commerce API built with **Node.js** and **Express**. It allows users to register, browse products, add items to a shopping cart, place orders, and make payments via card or cash on delivery. The API supports multiple user roles, including admin and manager, and offers features such as product and brand management, password reset, and more.
 
+
+## Table of Contents
+- [Features](#features)
+- [Technologies Used](#technologies-used)
+- [Getting Started](#getting-started)
+- [Installation](#installation)
+- [Environment Variables](#environment-variables)
+- [API Endpoints](#api-endpoints)
+- [DevOps Integration](#devops-integration)
+- [Ansible Setup](#ansible-setup)
+- [Testing the Application](#testing-the-application)
 - [Monitoring with Prometheus and Grafana](#monitoring-with-prometheus-and-grafana)
 - [Load Balancer Setup](#load-balancer-setup)
 - [Contributing](#contributing)
@@ -65,6 +75,22 @@ This project is a fully functional e-commerce API built with **Node.js** and **E
 - MongoDB (local installation or cloud-based)
 - Docker and Docker Compose (for containerization)
 
+
+## API Endpoints
+
+### Authentication
+- `POST /api/auth/signup`: Register a new user
+- `POST /api/auth/login`: User login and obtain a JWT token
+- `POST /api/auth/forgotPassword`: Request a password reset link
+- `POST api/auth/verifyResetCode`: verify Reset Password
+- `POST api/auth/resetPassword`: Reset Password
+  
+### Products
+- `GET /api/products`: Get all products
+- `GET /api/products/:id`: Get Product By Id
+- `POST /api/products`: Create a new product (Admin)
+- `PUT /api/products/:id`: Update a product (Admin)
+- `DELETE /api/products/:id`: Delete a product (Admin)
 
 ### Cart
 - `POST /api/cart`: Add a product to the cart
@@ -175,6 +201,10 @@ STRIPE_SECRET_KEY =
 STRIPE_WEBHOOK_SECRET=""
 ```
 
+3. Build the project:
+   ```bash
+   docker-compose up
+   ```
 ##notice ( mapping port in docker-compose.yml from 4000 to 3000 app)
 4. Check Docker images and running containers:
    ```bash
@@ -186,8 +216,6 @@ STRIPE_WEBHOOK_SECRET=""
    ```bash
    top
    ```
-
-6. Map port from 4000 to 3000 in the app.
 
 ## Testing the Application
 - Use the Postman application to test the API.
@@ -223,6 +251,7 @@ STRIPE_WEBHOOK_SECRET=""
      ```bash
      systemctl restart prometheus
      ```
+- Access the Prometheus dashboard at `http://ipmaster:9090/graph` on the master.
 
 3. Install Grafana for visualization:
    ```bash
