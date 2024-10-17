@@ -1,0 +1,50 @@
+---
+- name: Install and configure MongoDB on server
+  hosts: mongodb_server
+  become: yes
+  tasks:
+    - name: Install gnupg and wget
+      yum:
+        name:
+          - gnupg
+          - wget
+        state: present
+
+    - name: Add MongoDB repository
+      yum_repository:
+        name: MongoDB
+        description: MongoDB Repository
+        baseurl: https://repo.mongodb.org/yum/redhat/$releasever/mongodb-org/6.0/x86_64/
+        gpgcheck: yes
+        enabled: yes
+        gpgkey: https://www.mongodb.org/static/pgp/server-6.0.asc
+
+    - name: Install MongoDB
+      yum:
+        name: mongodb-org
+        state: present
+
+    - name: Start and enable MongoDB service
+      systemd:
+        name: mongod
+        enabled: yes
+        state: started
+
+    - name: Restart MongoDB to apply new configurations
+      systemd:
+        name: mongod
+        state: restarted
+
+    - name: Ensure firewalld is installed
+      yum:
+        name: firewalld
+        state: present
+
+    - name: Allow MongoDB port through firewall
+      firewalld:
+        service: mongodb
+        permanent: yes
+        immediate: yes
+        state: enabled
+        zone: public
+

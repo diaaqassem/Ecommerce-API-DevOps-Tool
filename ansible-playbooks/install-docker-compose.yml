@@ -1,0 +1,32 @@
+---
+- name: Install Docker and Docker Compose on RedHat/CentOS
+  hosts: web_app
+  become: true
+  tasks:
+    - name: Install dependencies for Docker
+      yum:
+        name:
+          - yum-utils
+          - device-mapper-persistent-data
+          - lvm2
+        state: present
+    - name: Add Docker repository
+      command: |
+        yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+    - name: Install Docker
+      yum:
+        name: docker-ce
+        state: present
+    - name: Start and enable Docker service
+      systemd:
+        name: docker
+        state: started
+        enabled: true
+    - name: Install Docker Compose if not already installed
+      shell: |
+        curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+        chmod +x /usr/local/bin/docker-compose
+    - name: Run a command with an updated PATH
+      shell: echo $PATH
+      environment:
+        PATH: /usr/local/bin:{{ ansible_env.PATH }}

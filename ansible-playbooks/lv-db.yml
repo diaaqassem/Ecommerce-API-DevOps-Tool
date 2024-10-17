@@ -1,0 +1,62 @@
+---
+- name: Setup LVM and mount filesystem
+  hosts: mongodb_server
+  become: yes
+  vars:
+    disk_path: "/dev/sda"      
+    vg_name: "vgname"          
+    lv_name: "lvname"          
+    lv_size: "5G"              
+    mount_point: "/app"        
+
+  tasks:
+
+    - name: Create physical volume
+      command: pvcreate /dev/{{ disk_path }}
+      args:
+        warn: false
+      register: pvcreate_output
+
+    - name: Display physical volumes
+      command: pvs
+      ignore_errors: yes
+      register: pvs_output
+      when: pvcreate_output is succeeded
+
+    - name: Create volume group
+      command: vgcreate {{ vg_name }} /dev/{{ disk_path }}
+      when: pvcreate_output is succeeded
+      register: vgcreate_output
+
+    - name: Display volume groups
+      command: vgs
+      ignore_errors: yes
+      when: vgcreate_output is succeeded
+      register: vgs_output
+
+    - name: Create logical volume
+      command: lvcreate --name {{ lv_name }} --size {{ lv_size }} {{ vg_name }}
+      when: vgcreate_output is succeeded
+      register: lvcreate_output
+
+    - name: Display logical volumes
+      command: lvs
+      ignore_errors: yes
+      when: lvcreate_output is succeeded
+      register: lvs_output
+
+    - name: Format logical volume with ext4 filesystem
+      filesystem:
+        fstype: ext4
+        dev: /dev/{{ vg_name }}/{{ lv_name }}
+      when: lvcreate_output is succeeded
+
+    - name: Add the mount to /etc/fstab
+      lineinfile:
+        path: /etc/fstab
+        line: "/dev/{{ vg_name }}/{{ lv_name }}    {{ mount_point }}    ext4    defaults    0 0"
+        create: yes
+      when: lvcreate_output is succeeded
+
+    - name: Mount all filesystems
+      command: mount -a

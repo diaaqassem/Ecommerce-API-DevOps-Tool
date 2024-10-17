@@ -1,0 +1,7 @@
+[mongodb_server]
+mongodb_server1 ansible_host=10.0.0.150 ansible_user=diaa ansible_ssh_private_key_file=/root/pem/diaaqassem.pem ansible_become=true
+
+[web_app]
+web_app1 ansible_host=10.0.0.100 #localhost
+web_app2 ansible_host=10.0.0.200 ansible_user=diaa ansible_ssh_private_key_file=/root/pem/diaaqassem.pem ansible_become=true 
+ 
