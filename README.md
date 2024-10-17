@@ -160,7 +160,7 @@ This project is a fully functional e-commerce API built with **Node.js** and **E
 1. Clone the repository:
    ```bash
    mkdir nodejs-ecommerce-api-v1
-   git clone https://github.com/diaaqassem/ecommerce-api-with-devops-tool.git
+   git clone https://github.com/diaaqassem/ecommerce-api-devops-tool.git
    cd nodejs-ecommerce-api-v1
    ```
 
