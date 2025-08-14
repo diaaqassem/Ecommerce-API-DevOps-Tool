@@ -226,7 +226,7 @@ STRIPE_WEBHOOK_SECRET=""
        yum install tcpdump
        tcpdump -i br-networkid -w req.pcap
        tcpdump -r req.pcap >> req.txt
-```
+    ```
 
 ## Monitoring with Prometheus and Grafana
 1. Install Prometheus:
